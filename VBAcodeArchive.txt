@@ -1,0 +1,62 @@
+Public Function ReflectAngle(Ptheta, Htheta)
+'This function will take a ray with an incoming angle Ptheta intercepting
+'the side of the hexagon with angle Htheta and determine the new angle
+'after reflection; assumes angle of incidence = angle of reflection with
+'respect to the normal to the hex face
+Dim returnVal As Double
+returnVal = -1
+If Ptheta < Htheta + 90 Then
+    'This amounts to a clockwise rotation, angle decreases
+    returnVal = CorrectAngle(2 * Htheta - Ptheta)
+Else
+    'This amounts to a counter-clockwise rotation, angle increases
+    returnVal = CorrectAngle(2 * (Htheta + 180) - Ptheta)
+End If
+
+'Return the calculated result
+ReflectAngle = returnVal
+
+End Function
+
+-------------------------------
+
+Public Function VertexAngle(dx As Double, dy As Double)
+'This function will find the angle between the point in question and the
+'dx / dy components pointing to a vertex of the hexagon
+
+'Go through all possibilities to determine angles to the vertex
+Dim returnAngle As Double
+If dx > 0 Then
+    If dy > 0 Then returnAngle = Atn(dy / dx) * (180 / pi)
+    If dy < 0 Then returnAngle = 360 + Atn(dy / dx) * (180 / pi)
+    If dy = 0 Then returnAngle = 0   'On +x-axis
+End If
+If dx < 0 Then
+    If dy > 0 Then returnAngle = 180 + Atn(dy / dx) * (180 / pi)
+    If dy < 0 Then returnAngle = 180 + Atn(dy / dx) * (180 / pi)
+    If dy = 0 Then returnAngle = 180 'On -x-axis
+End If
+If dx = 0 Then
+    If dy > 0 Then returnAngle = 90  'On +y-axis
+    If dy < 0 Then returnAngle = 270 'On -y-axis
+    If dy = 0 Then returnAngle = -1  'Null, not possible
+End If
+
+'Return the discovered angle
+VertexAngle = returnAngle
+
+End Function
+
+---------------------------------
+
+'Store the slopes, y-intercepts and angles of the lines that form the faces of the hexagon
+'Faces are labelled 1, 2, 3, 4, 5, 6
+ihexFaceM = Array(-(3 ^ 0.5), 0, (3 ^ 0.5), -(3 ^ 0.5), 0, (3 ^ 0.5))
+ihexFaceB = Array(iSide * (3 ^ 0.5), iSide * (3 ^ 0.5) / 2, iSide * (3 ^ 0.5), -iSide * (3 ^ 0.5), -iSide * (3 ^ 0.5) / 2, -iSide * (3 ^ 0.5))
+ihexFaceTheta = Array(120, 0, 60, 120, 0, 60)
+
+'Store the slopes, y-intercepts and angles of the lines that form the faces of the hexagon
+'Faces are labelled 7, 8, 9, 10, 11, 12
+ohexFaceM = Array(-(3 ^ 0.5), 0, (3 ^ 0.5), -(3 ^ 0.5), 0, (3 ^ 0.5))
+ohexFaceB = Array(oSide * (3 ^ 0.5), oSide * (3 ^ 0.5) / 2, oSide * (3 ^ 0.5), -oSide * (3 ^ 0.5), -oSide * (3 ^ 0.5) / 2, -oSide * (3 ^ 0.5))
+ohexFaceTheta = Array(120, 0, 60, 120, 0, 60)
